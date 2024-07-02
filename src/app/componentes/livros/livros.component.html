@@ -1,0 +1,46 @@
+<!--Título e Botão Cadastrar-->
+<div class="inicio">
+  <h1>LIVROS</h1>
+  <button id="cadastrar" class="btn btn-primary" data-toggle="collapse" data-target="#dados">CADASTRAR</button> <!--Data-toogle usado para desabilitar o collapse-->
+</div>
+
+<!--Formulário-->
+<div class="formulario">
+  <form [formGroup]="formularioLivro" class="collapse" id="dados"> <!--Collapse usado para ocultar o Formulário-->
+    <label for="titulo">Título</label>
+    <p><input id="titulo" type="text" formControlName="campoTitulo"></p>
+    <label for="autor">Autor</label>
+    <p><input id="autor" type="text" formControlName="campoAutor"></p>
+    <label for="paginas">Nº Páginas</label>
+    <p><input id="paginas" type="number" formControlName="campoPaginas"></p>
+    <!--Botões do Formulário-->
+    <div class="botoes">
+      <button type="button" class="btn btn-primary" (click)="gravar()">SALVAR</button>
+      <button class="btn btn-primary" data-toggle="collapse" data-target="#dados">FECHAR</button>
+    </div>
+  </form>
+</div>
+
+
+<!--Tabela onde os dados digitados do Formulário serão capturados-->
+<!--Modelo retirado, e adaptado, da página do bootstrap-->
+<div class="container">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Código</th>
+        <th scope="col">Título</th>
+        <th scope="col">Autor</th>
+        <th scope="col">Nº Páginas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let obj of listaLivros"> <!--Criando um objeto para lista de livros com os atributos do model livros-->
+        <td>{{obj.id}}</td>
+        <td>{{obj.titulo}}</td>
+        <td>{{obj.autor}}</td>
+        <td>{{obj.paginas}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

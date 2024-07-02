@@ -1,0 +1,19 @@
+h1{
+  text-align: center;
+  background-color: white;
+  color: blue;
+  height: 65px;
+  margin: 5px auto;
+  border-radius: 5px;
+  padding: 5px;
+  border: solid blue;
+}
+p{
+  font-size: 20px;
+  margin-left: 20px;
+  margin-top: 40px;
+  font-style: italic;
+}
+.img{
+  text-align: center;
+}

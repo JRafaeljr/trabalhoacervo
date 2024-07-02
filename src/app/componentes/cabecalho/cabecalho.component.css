@@ -1,0 +1,18 @@
+button{
+  background-color: transparent;
+  border-radius: 5%;
+  border:darkgoldenrod;
+  color: white;
+  margin-top: 5px;
+  margin-left: 5px;
+  font-weight: bolder;
+}
+a{
+  text-decoration: none;
+}
+.home a:visited{
+  color: white;
+}
+a:hover{
+  text-decoration-line: none;
+}

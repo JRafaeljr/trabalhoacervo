@@ -1,0 +1,47 @@
+<!--Título e Botão Cadastrar-->
+<div class="inicio">
+  <h1>FILMES</h1>
+  <button id="cadastrar" class="btn btn-primary" data-toggle="collapse" data-target="#dados">CADASTRAR</button> <!--Data-toogle usado para desabilitar o collapse-->
+</div>
+
+<!--Formulário-->
+<div class="formulario">
+  <form [formGroup]="formularioLivro" class="collapse" id="dados"> <!--Collapse usado para ocultar o Formulário-->
+    <label for="id">Código</label>
+    <p><input id="id" type="number" formControlName="campoId" [(ngModel)]="this.filme.id"></p>
+    <label for="titulo">Título</label>
+    <p><input id="titulo" type="text" formControlName="campoTitulo" [(ngModel)]="this.filme.titulo"></p>
+    <label for="diretor">Diretor</label>
+    <p><input id="diretor" type="text" formControlName="campoDiretor" [(ngModel)]="this.filme.diretor"></p>
+    <label for="genero">Gênero</label>
+    <p><input id="genero" type="text" formControlName="campoGenero" [(ngModel)]="this.filme.genero"></p>
+    <!--Botões do Formulário-->
+    <div class="botoes">
+      <button type="button" class="btn btn-primary" (click)="gravar()">SALVAR</button>
+      <button class="btn btn-primary" data-toggle="collapse" data-target="#dados">FECHAR</button>
+    </div>
+  </form>
+</div>
+
+<!--Tabela onde os dados digitados do Formulário serão capturados-->
+<div class="container">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Código</th>
+        <th scope="col">Título</th>
+        <th scope="col">Diretor</th>
+        <th scope="col">Gênero</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let obj of listaFilmes"> <!--Criando um objeto para lista de filmes com os atributos do model filmes-->
+        <td>{{obj.id}}</td>
+        <td>{{obj.titulo}}</td>
+        <td>{{obj.diretor}}</td>
+        <td>{{obj.genero}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
