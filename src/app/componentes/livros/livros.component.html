@@ -1,45 +1,58 @@
 <!--Título e Botão Cadastrar-->
 <div class="inicio">
   <h1>LIVROS</h1>
-  <button id="cadastrar" class="btn btn-primary" data-toggle="collapse" data-target="#dados">CADASTRAR</button> <!--Data-toogle usado para desabilitar o collapse-->
+  <button id="cadastrar" class="btn btn-primary" (click)="openEditar()">CADASTRAR</button>
 </div>
 
 <!--Formulário-->
-<div class="formulario">
-  <form [formGroup]="formularioLivro" class="collapse" id="dados"> <!--Collapse usado para ocultar o Formulário-->
+<div class="modal" id="editar">
+  <form [formGroup]="formularioLivro" (ngSubmit)="submitForm()">
     <label for="titulo">Título</label>
-    <p><input id="titulo" type="text" formControlName="campoTitulo"></p>
+    <p><input id="titulo" class="form-control" type="text" formControlName="Titulo"></p>
+    <div class="text-danger" *ngIf="isCampoValido('Titulo')">Campo Obrigatório</div>
     <label for="autor">Autor</label>
-    <p><input id="autor" type="text" formControlName="campoAutor"></p>
+    <p><input id="autor" class="form-control" type="text" formControlName="Autor"></p>
+    <div class="text-danger" *ngIf="isCampoValido('Autor')">Campo Obrigatório</div>
     <label for="paginas">Nº Páginas</label>
-    <p><input id="paginas" type="number" formControlName="campoPaginas"></p>
+    <p><input id="paginas" class="form-control" type="number" formControlName="Paginas"></p>
+    <div class="text-danger" *ngIf="isCampoValido('Paginas')">Campo Obrigatório</div>
     <!--Botões do Formulário-->
     <div class="botoes">
-      <button type="button" class="btn btn-primary" (click)="gravar()">SALVAR</button>
+      <button class="btn btn-success" type="submit">SALVAR</button>
       <button class="btn btn-primary" data-toggle="collapse" data-target="#dados">FECHAR</button>
     </div>
   </form>
 </div>
 
-
 <!--Tabela onde os dados digitados do Formulário serão capturados-->
 <!--Modelo retirado, e adaptado, da página do bootstrap-->
 <div class="container">
-  <table class="table table-striped">
+  <table class="table table-striped table-hover">
     <thead>
       <tr>
         <th scope="col">Código</th>
         <th scope="col">Título</th>
         <th scope="col">Autor</th>
         <th scope="col">Nº Páginas</th>
+        <th scope="col">Opções<i class="fas fa-cog"></i></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let obj of listaLivros"> <!--Criando um objeto para lista de livros com os atributos do model livros-->
-        <td>{{obj.id}}</td>
-        <td>{{obj.titulo}}</td>
-        <td>{{obj.autor}}</td>
-        <td>{{obj.paginas}}</td>
+      <tr *ngFor="let lvr of listaLivros; let i = index"> <!--Criando uma isntancia de listaLivros captar os atributos do model livros-->
+        <th scope="row"> {{i + 1}}</th>
+        <td>{{lvr.titulo}}</td>
+        <td>{{lvr.autor}}</td>
+        <td>{{lvr.paginas}}</td>
+        <td>
+          <!--BOTÃO DELETAR-->
+          <button class="btn btn-danger rounded-circle" (click)="excluirEntrada(lvr.id)">
+            <i class="fa-solid fa-ban"></i>
+          </button>
+          <!--BOTÃO EDITAR-->
+          <button class="btn btn-warning  rounded-circle" (click)="carregarDadosEntrada(lvr)">
+          <i class="fas fa-edit"></i>
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>

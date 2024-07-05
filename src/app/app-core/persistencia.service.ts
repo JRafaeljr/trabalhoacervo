@@ -11,12 +11,24 @@ export class PersistenciaService extends Dexie{
   constructor() {
     super('LivrosDB');
     this.version(1).stores({
-      livros: '++id, titulo, autor, paginas'
+      livros: '++id, titulo, autor, paginas',
     });
     this.livros = this.table('livros');
   }
 
-  addLivro(livro: LivrosModel): Promise<number>{
-    return this.livros.add(livro);
+ async addLivro(livro: LivrosModel): Promise<number>{
+    return await this.livros.add(livro);
+  }
+
+  async removerEntrada(id: number): Promise<void>{
+    return await this.livros.delete(id);
+  }
+
+  async buscarEntradas(): Promise<LivrosModel[]>{
+    return await this.livros.toArray();
+  }
+
+  async atualizarEntrada(id: number, entrada: LivrosModel): Promise<number>{
+    return await this.livros.update(id, entrada);
   }
 }

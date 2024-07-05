@@ -1,73 +1,162 @@
 import { Component, OnInit } from '@angular/core';
 import { LivrosModel } from '../../model/livros.model';
 import { NgFor } from '@angular/common';
-import {FormBuilder,FormControl, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators} from '@angular/forms';
-//Importação do ReactiveFormsModule e demais componentes necessários para o Formulário
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import Swal from 'sweetalert2';
 import {PersistenciaService} from "../../app-core/persistencia.service";
-
+declare var $: any;
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-livros',
   standalone: true,
-  imports: [FormsModule, NgFor, ReactiveFormsModule,],
+  imports: [FormsModule, NgFor, ReactiveFormsModule, NgIf],
   templateUrl: './livros.component.html',
   styleUrl: './livros.component.css'
 })
-export class LivrosComponent{
-  public listaLivros: LivrosModel[] = [];
+export class LivrosComponent implements OnInit{
+  i: number =0;
+  listaLivros: any[] = [];
   formularioLivro: FormGroup;
+  entradaVisualizar: any;
 
 
   constructor(private db: PersistenciaService, private fb: FormBuilder) {
-   
+
     this.formularioLivro = this.fb.group({
-        titulo: ['', Validators.required],
-        autor: ['', Validators.required],
-        paginas: ['', Validators.required],
+        Titulo: ['', Validators.required],
+        Autor: ['', Validators.required],
+        Paginas: ['', Validators.required],
         id:[0]
     });
-    
-
   }
-
 //Método para gravar os dados no formulário
-  public gravar (){
+  gravar (){
     if(this.formularioLivro.valid){
       const novo: LivrosModel = new LivrosModel(
-        this.formularioLivro.value.titulo,
-        this.formularioLivro.value.autor,
-        this.formularioLivro.value.paginas,
+        this.formularioLivro.value.Titulo,
+        this.formularioLivro.value.Autor,
+        this.formularioLivro.value.Paginas
       );
-
       console.log('dados', novo)
       this.db.addLivro(novo).then(resposta =>{
         if (resposta > 0) {
           Swal.fire('Sucesso', 'Tarefa salva com sucesso!', 'success');
-          this.form.reset();
-          this.closeModal();
-          this.listarTarefas();
+          this.formularioLivro.reset();
+          this.closeEditar();
+          this.listarEntradas();
         }
       }).catch (respostaError => {
-        Swal.fire('Não foi dessa vez', 'Não foi possível salvar a tarefa, ' +
-          'tente novamente mais tarde', 'error');
+        Swal.fire('Não foi dessa vez', 'Não foi possível salvar a tarefa, tente novamente mais tarde', 'error');
         console.log(respostaError);
       })
     }else{
       console.log("CAMPOS INVALIDOS ENCONTRADOS.");
-      console.log("DADOS DOS CAMPOS: ", this.form.value);
-      Swal.fire('Cuidado', 'Alguns campos do formulário não estão ' +
-        'corretos.', 'warning');
+      console.log("DADOS DOS CAMPOS: ", this.formularioLivro.value);
+      Swal.fire('Cuidado', 'Alguns campos do formulário não estão corretos.', 'warning');
       this.marcarTodosComoClicados();
     }
-    
     }
-  }
-  submitForm() {
-    if (this.formularioLivro.value.id > 0) {
-      
-    }else {
-      this.gravar();
-    }
-  }
 
+    isCampoValido (inputNome: string) : boolean{
+      const campo: any = this.formularioLivro.get(inputNome);
+      return campo && campo.touched && campo.invalid;
+    }
+
+    listarEntradas() {
+      this.db.buscarEntradas().then(resposta => {
+        this.listaLivros= resposta;
+      })
+    }
+
+    openEditar () {
+      $('#editar').modal('show');
+    }
+
+    closeEditar () {
+      $('#editar').modal('hide');
+    }
+
+    setEntradaAtual (livro: LivrosModel) {
+      this.entradaVisualizar = livro;
+    }
+
+    excluirEntrada(id: number) {
+      Swal.fire (
+        {
+            title: 'Tem certeza?',
+            text: 'Você não poderá voltar atrás!',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim! Deletar!',
+            confirmButtonColor: '#3085d6'
+        }) .then((tipoBotao) => {
+          if(tipoBotao.isConfirmed){
+            this.db.removerEntrada(id).then(() => {
+              Swal.fire('Deletado!', 'A entrada foi deletada.', 'success');
+              this.listarEntradas();
+            });
+          }
+        }).catch(error => {
+          console.log(error);
+          Swal.fire('ERRO!', 'A entrada não foi deletada.', 'error')
+        });
+    }
+
+    submitForm() {
+      if (this.formularioLivro.value.id > 0) {
+          this.editarFormEntrada();
+      }else {
+        this.gravar();
+      }
+    }
+
+    carregarDadosEntrada (entradaEditar: LivrosModel) {
+      this.formularioLivro.patchValue({
+          Titulo: entradaEditar.titulo,
+          Autor: entradaEditar.autor,
+          Paginas: entradaEditar.paginas,
+          id: entradaEditar.id
+      });
+      this.openEditar();
+
+    }
+
+      editarFormEntrada() {
+        if (this.formularioLivro.valid){
+          const editarEntrada: LivrosModel = new LivrosModel(
+            this.formularioLivro.value.Titulo,
+            this.formularioLivro.value.Autor,
+            this.formularioLivro.value.Paginas,
+            this.formularioLivro.value.id
+          );
+          this.db.atualizarEntrada(this.formularioLivro.value.id, editarEntrada).then(reposta => {
+            if(reposta === 1) {
+              Swal.fire('Sucesso!', 'Entrada editada com sucesso.', 'success');
+              this.formularioLivro.reset();
+              this.closeEditar();
+              this.listarEntradas();
+            }else{
+              Swal.fire('Atenção', 'Nenhuma entrada encontrada, ou nenhuma alteração necessária', 'info');
+            }
+          }).catch(error => {
+            Swal.fire('Cuidado', 'Não foi possível editar a entrada.', 'error');
+          });
+        }else{
+          Swal.fire('Cuidado!', 'Alguns campos estão incorretos.', 'warning');
+          this.marcarTodosComoClicados();
+        }
+      }
+
+    marcarTodosComoClicados(){
+      Object.values(this.formularioLivro.controls).forEach(campo => {
+        campo.markAsTouched();
+      });
+    }
+
+    ngOnInit(): void {
+    this.listarEntradas();
+
+  }
 }

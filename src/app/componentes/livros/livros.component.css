@@ -13,7 +13,7 @@ h1{
   height: 40px;
   margin: 10px;
 }
-.formulario{
+.modal{
   margin: 10px auto;
   width: 300px;
 }
@@ -29,12 +29,9 @@ form{
   color: white;
   font-weight: bolder;
 }
-button{
-  border-radius: 5px;
-  border: solid;
-}
+
 table{
-  width: 700px;
+  width: 900px;
   border: solid blue;
   background-color: white;
   text-align: center;
@@ -42,7 +39,7 @@ table{
   color: blue;
 }
 .container{
-  width: 800px;
+  width: 850px;
   display: flex;
   justify-content: space-between;
   margin: auto;
@@ -57,3 +54,4 @@ input{
   border-radius: 5px;
   text-align: center;
 }
+
