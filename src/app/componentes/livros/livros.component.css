@@ -54,4 +54,6 @@ input{
   border-radius: 5px;
   text-align: center;
 }
-
+.rounded-circle{
+  margin-right: 5px; 
+}
