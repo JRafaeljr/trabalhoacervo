@@ -27,7 +27,8 @@ export class LivrosComponent implements OnInit{
         Titulo: ['', Validators.required],
         Autor: ['', Validators.required],
         Paginas: ['', Validators.required],
-        id:[0]
+        id:[0],
+        imagem: ['']
     });
   }
 //Método para gravar os dados no formulário
@@ -36,7 +37,9 @@ export class LivrosComponent implements OnInit{
       const novo: LivrosModel = new LivrosModel(
         this.formularioLivro.value.Titulo,
         this.formularioLivro.value.Autor,
-        this.formularioLivro.value.Paginas
+        this.formularioLivro.value.Paginas,
+        undefined,
+        this.formularioLivro.value.imagem
       );
       console.log('dados', novo)
       this.db.addLivro(novo).then(resposta =>{
@@ -81,6 +84,7 @@ export class LivrosComponent implements OnInit{
       this.entradaVisualizar = livro;
     }
 
+    //Método para excluir uma entrada da tabela
     excluirEntrada(id: number) {
       Swal.fire (
         {
@@ -111,25 +115,28 @@ export class LivrosComponent implements OnInit{
         this.gravar();
       }
     }
-
+    //Método para carregar os dados de entrada do Formulário
     carregarDadosEntrada (entradaEditar: LivrosModel) {
       this.formularioLivro.patchValue({
           Titulo: entradaEditar.titulo,
           Autor: entradaEditar.autor,
           Paginas: entradaEditar.paginas,
-          id: entradaEditar.id
+          id: entradaEditar.id,
+          imagem: entradaEditar.imagem
       });
       this.openEditar();
 
     }
 
+    //Método para editar o Formulário
       editarFormEntrada() {
         if (this.formularioLivro.valid){
           const editarEntrada: LivrosModel = new LivrosModel(
             this.formularioLivro.value.Titulo,
             this.formularioLivro.value.Autor,
             this.formularioLivro.value.Paginas,
-            this.formularioLivro.value.id
+            this.formularioLivro.value.id,
+            this.formularioLivro.value.imagem
           );
           this.db.atualizarEntrada(this.formularioLivro.value.id, editarEntrada).then(reposta => {
             if(reposta === 1) {
@@ -153,6 +160,17 @@ export class LivrosComponent implements OnInit{
       Object.values(this.formularioLivro.controls).forEach(campo => {
         campo.markAsTouched();
       });
+    }
+
+    onFileChange(event: any){
+      const file = event.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = (loadEvent) => {
+          this.formularioLivro.patchValue({imagem: loadEvent?.target?.result});
+        };
+        reader.readAsDataURL(file);
+      }
     }
 
     ngOnInit(): void {

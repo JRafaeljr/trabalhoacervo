@@ -11,7 +11,7 @@ export class PersistenciaService extends Dexie{
   constructor() {
     super('LivrosDB');
     this.version(1).stores({
-      livros: '++id, titulo, autor, paginas',
+      livros: '' + '++id, ' +  'titulo,' + 'autor,' + 'paginas,' + 'imagem',
     });
     this.livros = this.table('livros');
   }

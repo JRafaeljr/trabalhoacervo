@@ -16,6 +16,11 @@
     <label for="paginas">Nº Páginas</label>
     <p><input id="paginas" class="form-control" type="number" formControlName="Paginas"></p>
     <div class="text-danger" *ngIf="isCampoValido('Paginas')">Campo Obrigatório</div>
+    <!--Inserindo imagem-->
+    <div class="md-3 col">
+      <hr>
+      <input class="img" type="file" accept="image/*" (change)="onFileChange($event)">
+    </div>
     <!--Botões do Formulário-->
     <div class="botoes">
       <button class="btn btn-success" type="submit">SALVAR</button>
@@ -34,7 +39,7 @@
         <th scope="col">Título</th>
         <th scope="col">Autor</th>
         <th scope="col">Nº Páginas</th>
-        <th scope="col">Opções<i class="fas fa-cog"></i></th>
+        <th scope="col">Opções <i class="fa-solid fa-gear"></i></th>
       </tr>
     </thead>
     <tbody>
@@ -44,16 +49,61 @@
         <td>{{lvr.autor}}</td>
         <td>{{lvr.paginas}}</td>
         <td>
-          <!--BOTÃO DELETAR-->
-          <button class="btn btn-danger rounded-circle" (click)="excluirEntrada(lvr.id)">
+          <!--DELETAR-->
+          <button class="btn btn-danger rounded-circle" data-bs-target="tooltip" title="Excluir" (click)="excluirEntrada(lvr.id)">
             <i class="fa-solid fa-ban"></i>
           </button>
-          <!--BOTÃO EDITAR-->
-          <button class="btn btn-warning  rounded-circle" (click)="carregarDadosEntrada(lvr)">
+
+          |
+
+          <!--EDITAR-->
+          <button class="btn btn-warning  rounded-circle" data-bs-target="tooltip" title="Editar" (click)="carregarDadosEntrada(lvr)">
           <i class="fas fa-edit"></i>
           </button>
+
+          |
+
+          <!--VISUALIZAR -->
+          <button type="button" class="btn btn-primary rounded-circle"
+        data-toggle="modal" data-target="#LivrosModal" data-bs-target="tooltip" title="Visualizar" (click)="setEntradaAtual(lvr)">
+          <i class="fas fa-eye"></i>
+          </button>
+
         </td>
       </tr>
     </tbody>
   </table>
+</div>
+
+<!--Modal para o Visualizar-->
+<div id="LivrosModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-reader">
+        <h3 class="modal-title" style="text-align: center;">Detalhes</h3>
+        <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="text">
+          <p> <strong>Título:</strong>  {{ entradaVisualizar?.titulo }} </p>
+          <p> <strong>Autor:</strong>  {{ entradaVisualizar?.autor }} </p>
+          <p> <strong>Número de páginas:</strong>  {{ entradaVisualizar?.paginas }} </p>
+      </div>
+      <hr>
+      <!--Criada uma div para centralizar a imagem no modal-->
+      <div class="img">
+        <img [src]="entradaVisualizar?.imagem" alt="Imagem da tarefa"            *ngIf="entradaVisualizar?.imagem">
+      </div>
+      <hr>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">Fechar</button>
+      </div>
+
+    </div>
+
+  </div>
+
 </div>

@@ -6,17 +6,21 @@
   border: solid blue;
   color: blue;
 }
+
 h1{
   margin: 8px;
 }
+
 #cadastrar{
   height: 40px;
   margin: 10px;
 }
+
 .modal{
   margin: 10px auto;
   width: 300px;
 }
+
 form{
   width: 300px;
   border: solid blue;
@@ -31,15 +35,16 @@ form{
 }
 
 table{
-  width: 900px;
+  width: 100%;
   border: solid blue;
   background-color: white;
   text-align: center;
   margin: auto;
   color: blue;
 }
+
 .container{
-  width: 850px;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   margin: auto;
@@ -50,10 +55,38 @@ table{
   justify-content: space-around;
   margin: 10px auto;
 }
+
 input{
   border-radius: 5px;
   text-align: center;
 }
+
 .rounded-circle{
-  margin-right: 5px; 
+  margin-right: 5px;
 }
+
+.modal-content{
+  color: blue;
+  border-radius: 10px;
+  border: solid 2px blue;
+}
+
+.img{
+  background-color: white;
+  display: flex;
+  justify-content: center;
+}
+
+img{
+  border-radius: 10px;
+}
+
+hr{
+  border: solid blue;
+}
+
+.modal-footer{
+  display: flex;
+  justify-content: center;
+}
+
